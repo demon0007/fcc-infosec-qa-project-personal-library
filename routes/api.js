@@ -33,8 +33,14 @@ module.exports = function (app) {
           //response will be array of book objects
           //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
           let books = db.collection('books').find()
-          console.log(books)
-          res.json(books.toArray())
+          books.toArray((err, book) => {
+            if (err) {
+              console.log(err)
+              res.json({error: 'Error'})
+            } else {
+              res.json(book)
+            }
+          })
           
     
         })

@@ -82,7 +82,11 @@ module.exports = function (app) {
               console.log(err)
               res.json({error: 'Error'})
             } else {
-              res.json(book[0])
+              if (book.length == 0 ) {
+                res.send('no book exits')
+              } else {
+                res.json(book[0])
+              }
             }
           })
         })

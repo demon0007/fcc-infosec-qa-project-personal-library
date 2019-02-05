@@ -85,7 +85,7 @@ module.exports = function (app) {
           //json res format same as .get
           db.collection('books').findOneAndUpdate(
             {_id: ObjectId(bookid)},
-            {$push: { comments: comment }},
+            {$push: { comments: comment }, $inc: { commentcount: +1 }},
             (err, doc) => {
               if (err) {
                 console.log(err)
@@ -100,6 +100,14 @@ module.exports = function (app) {
         .delete(function(req, res){
           var bookid = req.params.id;
           //if successful response will be 'delete successful'
+          db.collection('books').remove({_id: ObjectId(bookid)}, (err, doc) => {
+            if (err) {
+              console.log(err)
+              res.json({error: 'Error Deleting Book'})
+            } else {
+              res.json({success: 'delete successful'})
+            }
+          })
         });
   
 };

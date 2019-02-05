@@ -32,7 +32,7 @@ module.exports = function (app) {
         .get(function (req, res){
           //response will be array of book objects
           //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
-          let books = db.collection('books').find()
+          let books = db.collection('books').find({}, ['_id', 'title', 'commentcount'])
           books.toArray((err, book) => {
             if (err) {
               console.log(err)
@@ -48,12 +48,12 @@ module.exports = function (app) {
         .post(function (req, res){
           var title = req.body.title;
           //response will contain new book object including atleast _id and title
-          db.collection('books').insert({title: title}, (err, doc) => {
+          db.collection('books').insert({title: title, comments: [], commentcount: 0}, (err, doc) => {
             if (err) {
               console.log(err)
               res.json({'error': 'Error in Adding Book'})
             } else {
-              res.json(doc.ops[0])
+              res.json({_id: doc.ops[0]._id, title: doc.ops[0].title})
             }
           })
         })
@@ -68,7 +68,7 @@ module.exports = function (app) {
         .get(function (req, res){
           var bookid = req.params.id;
           //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
-          let books = db.collection('books').find({_id: ObjectId(bookid)})
+          let books = db.collection('books').find({_id: ObjectId(bookid)}, ['_id', 'title', 'comments'])
           books.toArray((err, book) => {
             if (err) {
               console.log(err)
@@ -83,6 +83,7 @@ module.exports = function (app) {
           var bookid = req.params.id;
           var comment = req.body.comment;
           //json res format same as .get
+          db.
         })
 
         .delete(function(req, res){

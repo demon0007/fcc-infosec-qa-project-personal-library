@@ -48,6 +48,10 @@ module.exports = function (app) {
         .post(function (req, res){
           var title = req.body.title;
           //response will contain new book object including atleast _id and title
+          if (title == '') {
+            res.json({error: 'Empty Title'})
+            return
+          }
           db.collection('books').insert({title: title, comments: [], commentcount: 0}, (err, doc) => {
             if (err) {
               console.log(err)

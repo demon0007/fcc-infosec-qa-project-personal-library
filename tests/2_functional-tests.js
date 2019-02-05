@@ -46,7 +46,8 @@ suite('Functional Tests', function() {
           .send({title: 'Harry Potter'})
           .end((err, res) => {
             assert.equal(res.status, 200)
-            assert.
+            assert.property(res.body, '_id')
+            assert.equal(res.body.title, 'Harry Potter')
             done()
         })
         //done();
@@ -54,6 +55,14 @@ suite('Functional Tests', function() {
       
       test('Test POST /api/books with no title given', function(done) {
         //done();
+        chai.request(server)
+          .post('/api/books')
+          .send({title: ''})
+          .end((err, res) => {
+            assert.equal(res.status, 200)
+            assert.equal(res.body.error, 'Empty Title')
+            done()
+        })
       });
       
     });
@@ -63,6 +72,15 @@ suite('Functional Tests', function() {
       
       test('Test GET /api/books',  function(done){
         //done();
+        chai.request(server)
+          .post('/api/books')
+          .send({title: 'Harry Potter'})
+          .end((err, res) => {
+            assert.equal(res.status, 200)
+            assert.property(res.body, '_id')
+            assert.equal(res.body.title, 'Harry Potter')
+            done()
+        })
       });      
       
     });

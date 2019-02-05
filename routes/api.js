@@ -60,6 +60,14 @@ module.exports = function (app) {
 
         .delete(function(req, res){
           //if successful response will be 'complete delete successful'
+          db.collection('books').deleteMany({}, (err, doc) => {
+            if (err) {
+              console.log(err)
+              res.send('Error Deleting Book')
+            } else {
+              res.send('complete delete successful')
+            }
+          })
         });
 
 
@@ -100,12 +108,12 @@ module.exports = function (app) {
         .delete(function(req, res){
           var bookid = req.params.id;
           //if successful response will be 'delete successful'
-          db.collection('books').remove({_id: ObjectId(bookid)}, (err, doc) => {
+          db.collection('books').deleteOne({_id: ObjectId(bookid)}, (err, doc) => {
             if (err) {
               console.log(err)
-              res.json({error: 'Error Deleting Book'})
+              res.send('Error Deleting Book')
             } else {
-              res.json({success: 'delete successful'})
+              res.send('delete successful')
             }
           })
         });

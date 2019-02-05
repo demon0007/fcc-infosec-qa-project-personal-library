@@ -65,7 +65,21 @@ $( document ).ready(function() {
       dataType: 'json',
       data: $('#newBookForm').serialize(),
       success: function(data) {
-        //update list
+        $.getJSON('/api/books', function(data) {
+          //var items = [];
+          itemsRaw = data;
+          $.each(data, function(i, val) {
+            items.push('<li class="bookItem" id="' + i + '">' + val.title + ' - ' + val.commentcount + ' comments</li>');
+            return ( i !== 14 );
+          });
+          if (items.length >= 15) {
+            items.push('<p>...and '+ (data.length - 15)+' more!</p>');
+          }
+          $('<ul/>', {
+            'class': 'listWrapper',
+            html: items.join('')
+            }).appendTo('#display');
+        });
       }
     });
   });
@@ -77,7 +91,7 @@ $( document ).ready(function() {
       dataType: 'json',
       data: $('#newBookForm').serialize(),
       success: function(data) {
-        //update list
+        $('#display').html('<br><strong>' + data + '<strong><br>')
       }
     });
   }); 

@@ -83,7 +83,18 @@ module.exports = function (app) {
           var bookid = req.params.id;
           var comment = req.body.comment;
           //json res format same as .get
-          db.
+          db.collection('books').findOneAndUpdate(
+            {_id: ObjectId(bookid)},
+            {$push: { comments: comment }},
+            (err, doc) => {
+              if (err) {
+                console.log(err)
+                res.json({error: 'Error Adding Comment'})
+              } else {
+                res.redirect('/api/books/'+bookid)
+              }
+            }
+          )
         })
 
         .delete(function(req, res){

@@ -87,7 +87,7 @@ module.exports = function (app) {
               res.json({error: 'Error'})
             } else {
               if (book.length == 0 ) {
-                res.send('no book exits')
+                res.send('no book exists')
               } else {
                 res.json(book[0])
               }

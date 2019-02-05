@@ -95,7 +95,7 @@ suite('Functional Tests', function() {
           .get('/api/books/5c59b6a937a2050881a71f6e')
           .end((err, res) => {
             assert.equal(res.status, 200)
-            console.log(res)
+            assert.equal(res.text, 'no book exists')
             done()
           } )
         
@@ -107,10 +107,10 @@ suite('Functional Tests', function() {
           .get('/api/books/5c59c4dd4928645e12fb8d4d')
           .end((err, res) => {
             assert.equal(res.status, 200)
-            assert.propert(res.body, '_id')
-            assert.propert(res.body, 'title')
-            assert.propert(res.body, 'commentcount')
-            assert.propert(res.body, 'comment')
+            assert.property(res.body, '_id')
+            assert.property(res.body, 'title')
+            // assert.property(res.body, 'commentcount')
+            assert.property(res.body, 'comments')
           done()
           } )
       });
@@ -122,7 +122,15 @@ suite('Functional Tests', function() {
       
       test('Test POST /api/books/[id] with comment', function(done){
         chai.request(server)
-          .post('')
+          .post('/api/books/5c59c4dd4928645e12fb8d4d')
+          .send({comment: 'This is a test'})
+          .end((err, res) => {
+            assert.equal(res.status, 200)
+            assert.isArray(res.body.comments)
+            assert.equal(res.body._id, '5c59c4dd4928645e12fb8d4d')
+            assert.include(res.body.comments, 'This is a test')
+            done()
+          })
       });
       
     });
